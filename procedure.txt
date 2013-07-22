@@ -1,0 +1,29 @@
+DELIMITER //
+Create procedure takim_sil(in id INT)
+BEGIN 
+DELETE FROM takimlar where takim_id=id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE takim_duzelt(
+in id int,
+IN isim VARCHAR(50),
+IN lig INT,
+in baskani varchar(100),
+in tarih varchar(50),
+in sponsoru varchar(50),
+in td int,
+in resim varchar(100))
+BEGIN
+UPDATE takimlar SET adi=isim, lig_id=lig, baskan=baskani, kurulus_tarihi=tarih, sponsor=sponsoru, teknik_id=td, resim_yolu=resim WHERE takim_id=id;
+END //
+DELIMITER;
+
+
+create view puan_tablo AS
+SELECT * FROM takimlar Order By puan desc
+
+CREATE VIEW gol_kral AS
+SELECT takim_id,CONCAT(adi,' ',ucase(soyadi)) adsoyad,SUM(gol_sayisi) gol 
+FROM futbolcular INNER JOIN goller ON futbolcular.lisans_no = goller.oyuncu_id  group by oyuncu_id order by gol desc LIMIT 10 
